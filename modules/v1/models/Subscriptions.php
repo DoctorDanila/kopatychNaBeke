@@ -14,8 +14,8 @@ use Yii;
  * @property int|null $reader
  * @property int|null $book
  *
- * @property Books $book0
- * @property Readers $reader0
+ * @property Book $book0
+ * @property Reader $reader0
  */
 class Subscriptions extends \yii\db\ActiveRecord
 {
@@ -35,31 +35,11 @@ class Subscriptions extends \yii\db\ActiveRecord
         return [
             [['issueDate'], 'required'],
             [['issueDate', 'returnDate'], 'safe'],
-            [['issueDate', 'returnDate'], 'date', 'format' => 'php:Y-m-d\TH:i:s.v\Z'],
             [['reader', 'book'], 'integer'],
             [['status'], 'string', 'max' => 16],
-            [['reader'], 'exist', 'skipOnError' => true, 'targetClass' => Readers::class, 'targetAttribute' => ['reader' => 'id']],
-            [['book'], 'exist', 'skipOnError' => true, 'targetClass' => Books::class, 'targetAttribute' => ['book' => 'id']],
+            [['reader'], 'exist', 'skipOnError' => true, 'targetClass' => Reader::class, 'targetAttribute' => ['reader' => 'id']],
+            [['book'], 'exist', 'skipOnError' => true, 'targetClass' => Book::class, 'targetAttribute' => ['book' => 'id']],
         ];
-    }
-
-    public function fields()
-    {
-        $fields = parent::fields();
-        unset($fields['book'],$fields['reader']);
-        return $fields;
-    }
-
-    public function extraFields()
-    {
-        $extraFields = parent::extraFields();
-        $extraFields["book"] = function () {
-            return $this->getBook()->one();
-        };
-        $extraFields["reader"] = function () {
-            return $this->getReader()->one();
-        };
-        return $extraFields;
     }
 
     /**
@@ -84,7 +64,7 @@ class Subscriptions extends \yii\db\ActiveRecord
      */
     public function getBook0()
     {
-        return $this->hasOne(Books::class, ['id' => 'book']);
+        return $this->hasOne(Book::class, ['id' => 'book']);
     }
 
     /**
@@ -94,6 +74,6 @@ class Subscriptions extends \yii\db\ActiveRecord
      */
     public function getReader0()
     {
-        return $this->hasOne(Readers::class, ['id' => 'reader']);
+        return $this->hasOne(Reader::class, ['id' => 'reader']);
     }
 }

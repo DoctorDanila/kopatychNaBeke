@@ -15,6 +15,9 @@ $config = [
         'v1'=>[
             'class'=>'app\modules\v1\Module',
         ],
+        'v2'=>[
+            'class'=>'app\modules\v2\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -65,6 +68,50 @@ $config = [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['v1/book', 'v1/subscription', 'v1/reader',],
                     'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['v2/city', 'v2/post', 'v2/project', 'v2/resume', ],
+                    'pluralize' => false,
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v2/candidate',
+                    'pluralize' => false,
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                        '{phone}' => '<phone:\\w+>',
+                    ],
+                    'extraPatterns' => [
+                        'GET,HEAD {id}' => 'view',
+                        'GET search/phone/{phone}' => 'phone',
+                        'POST' => 'create',
+                        'PUT {id}' => 'update',
+                        'PATCH {id}' => 'update',
+                    ],
+                    'patterns' => [
+                        'GET,HEAD' => 'index',
+                        '' => 'options',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v2/stuff',
+                    'pluralize' => false,
+                    'tokens' => [
+                        '{id}' => '<id:\\d+>',
+                    ],
+                    'extraPatterns' => [
+                        'GET,HEAD {id}' => 'view',
+                        'POST login' => 'login',
+                        'POST create' => 'create',
+                        'PUT {id}' => 'update',
+                        'PATCH {id}' => 'update',
+                    ],
+                    'patterns' => [
+                        'GET,HEAD' => 'index',
+                        '' => 'options',
+                    ],
                 ],
             ],
         ],
